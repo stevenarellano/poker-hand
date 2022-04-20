@@ -1,3 +1,6 @@
+mod cards;
+
 fn main() {
-    println!("Hello, world!");
+    // println!("{:?}", cards::deck)
+    println!("{:?}", cards::create_deck());
 }
