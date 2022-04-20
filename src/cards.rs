@@ -1,9 +1,9 @@
 mod misc;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Card {
-    suit: String,
-    number: u16,
+    pub suit: String,
+    pub number: u16,
 }
 
 pub fn create_deck() -> Vec<Card> {
@@ -11,7 +11,7 @@ pub fn create_deck() -> Vec<Card> {
 
     let mut deck = Vec::new();
     for i in 0..4 {
-        for j in 2..14 {
+        for j in 2..15 {
             deck.push(Card {
                 suit: String::from(suits[i]),
                 number: j as u16,
@@ -22,16 +22,31 @@ pub fn create_deck() -> Vec<Card> {
     return deck;
 }
 
-pub fn get_card(deck: &mut Vec<Card>) -> Card {
-    let ind = misc::range_rand(deck.len());
-    deck.remove(ind)
+pub fn get_card(deck_ptr: &mut Vec<Card>) -> Card {
+    let ind = misc::range_rand(deck_ptr.len());
+    deck_ptr.remove(ind)
 }
 
-pub fn deal_hand(deck: &mut Vec<Card>) -> Vec<Card> {
+pub fn deal_hand(deck_ptr: &mut Vec<Card>) -> Vec<Card> {
     let mut hand = Vec::new();
 
     for i in 0..2 {
-        hand.push(get_card(deck));
+        hand.push(get_card(deck_ptr));
+    }
+
+    hand
+}
+
+pub fn burn_card(deck_ptr: &mut Vec<Card>) {
+    let ind = misc::range_rand(deck_ptr.len());
+    deck_ptr.remove(ind);
+}
+
+pub fn deal_flop(deck_ptr: &mut Vec<Card>) -> Vec<Card> {
+    let mut hand = Vec::new();
+
+    for i in 0..3 {
+        hand.push(get_card(deck_ptr));
     }
 
     hand
