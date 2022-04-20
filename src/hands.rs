@@ -1,110 +1,42 @@
 use crate::cards;
+use crate::hand_helper::*;
+use crate::hand_structs::*;
 
-pub struct RoyalFlush;
-
-pub struct StraightFlush {
-    pub suit: String,
-    pub high_card: u16,
+pub struct SuitCounter {
+    spades: u16,
+    hearts: u16,
+    diamonds: u16,
+    clubs: u16,
 }
 
-pub struct FourOfAKind {
-    pub card: u16,
-    pub kicker: u16,
-}
-
-pub struct FullHouse {
-    pub set: Set,
-    pub pair: OnePair,
-}
-
-pub struct Flush {
-    pub card1: u16,
-    pub card2: u16,
-    pub card3: u16,
-    pub card4: u16,
-    pub card5: u16,
-}
-
-pub struct Straight {
-    pub high_card: u16,
-}
-
-pub struct Set {
-    pub set_number: u16,
-    pub card4: u16,
-    pub card5: u16,
-}
-
-pub struct TwoPair {
-    pub high_pair: OnePair,
-    pub low_pair: OnePair,
-    pub kicker: u16,
-}
-
-pub struct OnePair {
-    pub pair_number: u16,
-    pub card3: u16,
-    pub card4: u16,
-    pub card5: u16,
-}
-
-pub struct HighCard {
-    pub high_card: u16,
-}
-
-pub enum Hands {
-    RoyalFlush,
-    StraightFlush,
-    FourOfAKind,
-    FullHouse,
-    Flush,
-    Straight,
-    Set,
-    TwoPair,
-    OnePair,
-    HighCard,
-}
-
-pub fn sort_by_suit(hand: Vec<cards::Card>) -> Vec<cards::Card> {
-    let mut sorted = hand.clone();
-    sorted.sort_by(|a, b| {
-        a.suit
-            .chars()
-            .next()
-            .unwrap()
-            .partial_cmp(&b.suit.chars().next().unwrap())
-            .unwrap()
-    });
-
-    sorted
-}
-
-pub fn sort_by_num(hand: Vec<cards::Card>) -> Vec<cards::Card> {
-    let mut sorted = hand.clone();
-    sorted.sort_by(|a, b| b.number.partial_cmp(&a.number).unwrap());
-
-    sorted
-}
-
-pub fn sort_both_helper(a: &cards::Card, b: &cards::Card) -> std::cmp::Ordering {
-    if b.suit.chars().next().unwrap() == a.suit.chars().next().unwrap() {
-        b.number.partial_cmp(&a.number).unwrap()
-    } else {
-        a.suit
-            .chars()
-            .next()
-            .unwrap()
-            .partial_cmp(&b.suit.chars().next().unwrap())
-            .unwrap()
+impl SuitCounter {
+    fn any_flush(&self) -> bool {
+        self.spades >= 5 || self.hearts >= 5 || self.diamonds >= 5 || self.clubs >= 5
     }
 }
 
-pub fn sort_by_both(hand: Vec<cards::Card>) -> Vec<cards::Card> {
-    let mut sorted = hand.clone();
-    sorted.sort_by(|a, b| sort_both_helper(a, b));
+pub fn is_flush(hand: Vec<cards::Card>) -> bool {
+    let mut suit_counter: SuitCounter = SuitCounter {
+        spades: 0,
+        hearts: 0,
+        diamonds: 0,
+        clubs: 0,
+    };
 
-    sorted
+    for card in hand.iter() {
+        match card.suit.as_str() {
+            "Spades" => suit_counter.spades += 1,
+            "Hearts" => suit_counter.hearts += 1,
+            "Diamonds" => suit_counter.diamonds += 1,
+            "Clubs" => suit_counter.clubs += 1,
+            _ => println!("NOT A SUIT"),
+        }
+    }
+
+    suit_counter.any_flush()
 }
+
+// pub fn get_flush(hand: Vec<cards::Card>) -> Hands {}
 
 // pub fn is_royal_flush(table: Vec<cards::Card>, hand: Vec<cards::Card>) -> bool {}
 

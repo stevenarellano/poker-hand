@@ -1,4 +1,4 @@
-mod misc;
+use crate::misc;
 
 #[derive(Clone, Debug)]
 pub struct Card {
