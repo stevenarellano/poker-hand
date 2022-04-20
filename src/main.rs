@@ -9,8 +9,15 @@ fn main() {
 
     let mut flop: Vec<cards::Card> = cards::deal_flop(&mut deck);
     let mut hand = cards::deal_hand(&mut deck);
+    let mut flop2: Vec<cards::Card> = cards::deal_flop(&mut deck);
 
     flop.append(&mut hand);
+    flop.append(&mut flop2);
     println!("{:?}", flop);
-    println!("{:?}", hands::sort_by_suit(flop));
+    flop = hands::sort_by_suit(flop);
+    println!("{:?}", flop);
+    flop = hands::sort_by_num(flop);
+    println!("{:?}", flop);
+    flop = hands::sort_by_both(flop);
+    println!("{:?}", flop)
 }
