@@ -1,3 +1,5 @@
+mod misc;
+
 #[derive(Debug)]
 pub struct Card {
     suit: String,
@@ -18,6 +20,21 @@ pub fn create_deck() -> Vec<Card> {
     }
 
     return deck;
+}
+
+pub fn get_card(deck: &mut Vec<Card>) -> Card {
+    let ind = misc::range_rand(deck.len());
+    deck.remove(ind)
+}
+
+pub fn deal_hand(deck: &mut Vec<Card>) -> Vec<Card> {
+    let mut hand = Vec::new();
+
+    for i in 0..2 {
+        hand.push(get_card(deck));
+    }
+
+    hand
 }
 
 fn main() {}
